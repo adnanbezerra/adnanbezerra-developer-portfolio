@@ -103,9 +103,18 @@ export default function Portfolio() {
               </FadeIn>
               
               <FadeIn delay={0.4}>
-                <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mb-10 leading-relaxed">
-                  {t.hero.description}
-                </p>
+                <div className="flex flex-col gap-2 mb-10">
+                  <p className="text-base sm:text-lg text-muted-foreground max-w-2xl leading-relaxed">
+                    {t.hero.description}
+                  </p>
+                  <a 
+                    href="mailto:adnanbezerra@proton.me" 
+                    className="text-primary hover:underline font-mono flex items-center gap-2 w-fit"
+                  >
+                    <Mail size={18} />
+                    adnanbezerra@proton.me
+                  </a>
+                </div>
               </FadeIn>
               
               <FadeIn delay={0.5} className="flex flex-wrap items-center gap-4">
@@ -124,6 +133,15 @@ export default function Portfolio() {
                 >
                   <Github size={18} />
                   {t.hero.resume}
+                </a>
+                <a 
+                  href="https://www.linkedin.com/in/adnanbezerra" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-8 py-4 rounded-xl font-semibold bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2"
+                >
+                  <Linkedin size={18} />
+                  LinkedIn
                 </a>
               </FadeIn>
             </div>
