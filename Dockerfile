@@ -3,7 +3,8 @@ FROM node:20-alpine AS base
 FROM base AS deps
 RUN corepack enable pnpm
 WORKDIR /app
-COPY package.json ./
+COPY pnpm-lock.yaml package.json ./
+RUN apk add --no-cache build-base  # Adicionando dependências do sistema
 RUN pnpm install --frozen-lockfile 
 
 FROM base AS builder
@@ -16,7 +17,6 @@ RUN pnpm build
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
-
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nodejs
 
@@ -26,3 +26,4 @@ COPY --from=builder /app/package.json ./
 USER nodejs
 EXPOSE 3000
 CMD ["node", "dist/index.cjs"]
+
