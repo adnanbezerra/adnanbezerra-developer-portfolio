@@ -8,25 +8,25 @@ import NotFound from "@/pages/not-found";
 import Portfolio from "@/pages/Portfolio";
 
 function Router() {
-  return (
-    <Switch>
-      <Route path="/" component={Portfolio} />
-      <Route component={NotFound} />
-    </Switch>
-  );
+    return (
+        <Switch>
+            <Route path="/" component={Portfolio} />
+            <Route component={NotFound} />
+        </Switch>
+    );
 }
 
 function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <LanguageProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
-      </LanguageProvider>
-    </QueryClientProvider>
-  );
+    return (
+        <QueryClientProvider client={queryClient}>
+            <LanguageProvider>
+                <TooltipProvider>
+                    <Toaster />
+                    <Router />
+                </TooltipProvider>
+            </LanguageProvider>
+        </QueryClientProvider>
+    );
 }
 
 export default App;
