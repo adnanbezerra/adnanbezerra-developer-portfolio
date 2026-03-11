@@ -2,8 +2,11 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { useEffect, useState } from "react";
 import {
     ArrowRight,
+    ChevronLeft,
+    ChevronRight,
     Code2,
     Database,
     Layout,
@@ -20,6 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useCreateMessage } from "@/hooks/use-messages";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 // Schema for frontend form validation mapping to the backend requirement
 const contactSchema = z.object({
@@ -34,6 +38,8 @@ export default function Portfolio() {
     const { t } = useLanguage();
     const { toast } = useToast();
     const createMessage = useCreateMessage();
+    const [activeProjectIndex, setActiveProjectIndex] = useState(0);
+    const [projectsPerView, setProjectsPerView] = useState(1);
 
     const {
         register,
@@ -58,6 +64,55 @@ export default function Portfolio() {
                 variant: "destructive",
             });
         }
+    };
+
+    useEffect(() => {
+        const updateProjectsPerView = () => {
+            setProjectsPerView(window.innerWidth >= 1024 ? 2 : 1);
+        };
+
+        updateProjectsPerView();
+        window.addEventListener("resize", updateProjectsPerView);
+
+        return () =>
+            window.removeEventListener("resize", updateProjectsPerView);
+    }, []);
+
+    const maxProjectIndex = Math.max(
+        0,
+        t.projects.items.length - projectsPerView,
+    );
+
+    useEffect(() => {
+        setActiveProjectIndex((current) =>
+            current > maxProjectIndex ? maxProjectIndex : current,
+        );
+    }, [maxProjectIndex]);
+
+    useEffect(() => {
+        if (maxProjectIndex === 0) {
+            return;
+        }
+
+        const interval = window.setInterval(() => {
+            setActiveProjectIndex((current) =>
+                current >= maxProjectIndex ? 0 : current + 1,
+            );
+        }, 5000);
+
+        return () => window.clearInterval(interval);
+    }, [maxProjectIndex]);
+
+    const goToPreviousProject = () => {
+        setActiveProjectIndex((current) =>
+            current === 0 ? maxProjectIndex : current - 1,
+        );
+    };
+
+    const goToNextProject = () => {
+        setActiveProjectIndex((current) =>
+            current >= maxProjectIndex ? 0 : current + 1,
+        );
     };
 
     const stackCategories = [
@@ -230,7 +285,11 @@ export default function Portfolio() {
                             >
                                 {/* Abstract avatar representation since no image provided */}
                                 <div className="aspect-square rounded-3xl overflow-hidden glass-panel relative flex items-center justify-center group">
-                                    <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-indigo-500/20 group-hover:scale-110 transition-transform duration-700"></div>
+                                    <img
+                                        src="/dena.png"
+                                        alt="Adnan Bezerra"
+                                        className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-indigo-500/20 group-hover:scale-110 transition-transform duration-700"
+                                    ></img>
 
                                     {/* Decorative code elements inside the "avatar" box */}
                                     <div className="absolute top-8 left-8 text-white/20 font-mono text-sm group-hover:text-primary/40 transition-colors">
@@ -238,12 +297,6 @@ export default function Portfolio() {
                                     </div>
                                     <div className="absolute bottom-8 right-8 text-white/20 font-mono text-sm group-hover:text-primary/40 transition-colors">
                                         {"await build()"}
-                                    </div>
-
-                                    <div className="w-32 h-32 rounded-full border-2 border-primary/50 flex items-center justify-center relative shadow-[0_0_50px_rgba(var(--primary),0.3)]">
-                                        <div className="w-24 h-24 rounded-full bg-primary/20 backdrop-blur-md flex items-center justify-center text-4xl font-display font-bold text-white">
-                                            AB
-                                        </div>
                                     </div>
                                 </div>
                             </FadeIn>
@@ -310,38 +363,158 @@ export default function Portfolio() {
                             </div>
                         </FadeIn>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {t.projects.items.map((project, idx) => (
-                                <FadeIn key={idx} delay={0.1 * idx}>
-                                    <div className="group rounded-2xl p-8 glass-panel hover-glow h-full flex flex-col relative overflow-hidden">
-                                        <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-4 -translate-y-4 group-hover:translate-x-0 group-hover:translate-y-0 text-primary">
-                                            <ExternalLink size={24} />
-                                        </div>
+                        <FadeIn delay={0.1}>
+                            <div className="relative">
+                                <div className="absolute right-0 -top-20 flex items-center gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={goToPreviousProject}
+                                        aria-label="Previous project"
+                                        className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
+                                    >
+                                        <ChevronLeft size={20} />
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={goToNextProject}
+                                        aria-label="Next project"
+                                        className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
+                                    >
+                                        <ChevronRight size={20} />
+                                    </button>
+                                </div>
 
-                                        <span className="text-xs font-mono text-primary mb-4 tracking-wider uppercase">
-                                            {project.role}
-                                        </span>
-                                        <h3 className="text-2xl font-bold font-display text-white mb-4 group-hover:text-primary transition-colors">
-                                            {project.name}
-                                        </h3>
-                                        <p className="text-muted-foreground mb-8 flex-grow leading-relaxed">
-                                            {project.desc}
-                                        </p>
-
-                                        <div className="flex flex-wrap gap-2 mt-auto pt-6 border-t border-white/10">
-                                            {project.tech.map((tech, i) => (
-                                                <span
-                                                    key={i}
-                                                    className="text-xs font-medium text-muted-foreground bg-background/50 px-2 py-1 rounded"
+                                <div className="overflow-hidden">
+                                    <div
+                                        className="flex transition-transform duration-700 ease-out"
+                                        style={{
+                                            transform: `translateX(-${activeProjectIndex * (100 / projectsPerView)}%)`,
+                                        }}
+                                    >
+                                        {t.projects.items.map(
+                                            (project, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className="shrink-0 px-1"
+                                                    style={{
+                                                        width: `${100 / projectsPerView}%`,
+                                                    }}
                                                 >
-                                                    {tech}
-                                                </span>
-                                            ))}
-                                        </div>
+                                                    <div
+                                                        className={cn(
+                                                            "group rounded-2xl glass-panel hover-glow min-h-[360px] relative overflow-hidden",
+                                                            project.url
+                                                                ? "cursor-pointer"
+                                                                : "",
+                                                        )}
+                                                        onClick={() => {
+                                                            if (project.url) {
+                                                                window.open(
+                                                                    project.url,
+                                                                    "_blank",
+                                                                    "noopener,noreferrer",
+                                                                );
+                                                            }
+                                                        }}
+                                                    >
+                                                        {project.url && (
+                                                            <div className="absolute top-0 right-0 z-10 p-6 opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-4 -translate-y-4 group-hover:translate-x-0 group-hover:translate-y-0 text-primary">
+                                                                <ExternalLink
+                                                                    size={24}
+                                                                />
+                                                            </div>
+                                                        )}
+
+                                                        <div className="flex h-full flex-col lg:flex-row">
+                                                            <div
+                                                                className={cn(
+                                                                    "flex min-w-0 flex-1 flex-col p-8",
+                                                                    project.image
+                                                                        ? "lg:max-w-[58%]"
+                                                                        : "",
+                                                                )}
+                                                            >
+                                                                <span className="text-xs font-mono text-primary mb-4 tracking-wider uppercase">
+                                                                    {
+                                                                        project.role
+                                                                    }
+                                                                </span>
+                                                                <h3 className="text-2xl font-bold font-display text-white mb-4 group-hover:text-primary transition-colors">
+                                                                    {
+                                                                        project.name
+                                                                    }
+                                                                </h3>
+                                                                <p className="text-muted-foreground mb-8 flex-grow leading-relaxed">
+                                                                    {
+                                                                        project.desc
+                                                                    }
+                                                                </p>
+
+                                                                <div className="flex flex-wrap gap-2 mt-auto pt-6 border-t border-white/10">
+                                                                    {project.tech.map(
+                                                                        (
+                                                                            tech,
+                                                                            i,
+                                                                        ) => (
+                                                                            <span
+                                                                                key={
+                                                                                    i
+                                                                                }
+                                                                                className="text-xs font-medium text-muted-foreground bg-background/50 px-2 py-1 rounded"
+                                                                            >
+                                                                                {
+                                                                                    tech
+                                                                                }
+                                                                            </span>
+                                                                        ),
+                                                                    )}
+                                                                </div>
+                                                            </div>
+
+                                                            {project.image ? (
+                                                                <div className="relative min-h-[220px] lg:min-h-full lg:w-[42%] lg:shrink-0">
+                                                                    <img
+                                                                        src={
+                                                                            project.image
+                                                                        }
+                                                                        alt={
+                                                                            project.name
+                                                                        }
+                                                                        className="h-full w-full object-cover lg:rounded-r-2xl"
+                                                                    />
+                                                                    <div className="absolute inset-0 bg-gradient-to-r from-background/15 via-transparent to-transparent" />
+                                                                </div>
+                                                            ) : null}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ),
+                                        )}
                                     </div>
-                                </FadeIn>
-                            ))}
-                        </div>
+                                </div>
+
+                                <div className="mt-8 flex items-center justify-center gap-3">
+                                    {Array.from({
+                                        length: maxProjectIndex + 1,
+                                    }).map((_, idx) => (
+                                        <button
+                                            key={idx}
+                                            type="button"
+                                            onClick={() =>
+                                                setActiveProjectIndex(idx)
+                                            }
+                                            aria-label={`Go to carousel position ${idx + 1}`}
+                                            className={cn(
+                                                "h-2.5 rounded-full transition-all duration-300",
+                                                activeProjectIndex === idx
+                                                    ? "w-10 bg-primary"
+                                                    : "w-2.5 bg-white/20 hover:bg-white/40",
+                                            )}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        </FadeIn>
                     </div>
                 </section>
 
