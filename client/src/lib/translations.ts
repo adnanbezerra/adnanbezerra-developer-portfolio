@@ -1,4 +1,4 @@
-import { m } from 'framer-motion';
+import { m } from "framer-motion";
 
 export type Language = "en" | "pt";
 
@@ -41,9 +41,21 @@ export const translations = {
                     name: "Spondias CMS",
                     role: "Full Stack",
                     desc: "A UX-focused CMS created for a floriculture store, made with simplicity in mind to fit perfectly to my client's use-case and needs.",
-                    tech: ["Next.js", "Monolyth Architecture", "PostgreSQL", "MongoDB"],
+                    tech: [
+                        "Next.js",
+                        "Monolyth Architecture",
+                        "PostgreSQL",
+                        "MongoDB",
+                    ],
                     url: "https://spondias.adnanbezerra.tech",
-                    image: "/spondias.png"
+                    image: "/spondias.png",
+                },
+                {
+                    name: "LavôEu",
+                    role: "Full Stack",
+                    desc: "Laundry franchise in SP. Built system with customer and admin areas, totem support, and physical machine coordination.",
+                    tech: ["React", "ExpressJS", "PostgreSQL"],
+                    image: "/lavoeu.png",
                 },
                 {
                     name: "Calendo",
@@ -56,13 +68,6 @@ export const translations = {
                     role: "Full Stack",
                     desc: "E-commerce for artisanal products. Developed the website, automation for orders, and seamless checkout experience.",
                     tech: ["Next.js", "TypeScript", "Tailwind"],
-                },
-                {
-                    name: "LavôEu",
-                    role: "Full Stack",
-                    desc: "Laundry franchise in SP. Built system with customer and admin areas, totem support, and physical machine coordination.",
-                    tech: ["React", "ExpressJS", "PostgreSQL"],
-                    image: "/lavoeu.png"
                 },
             ],
         },
@@ -155,9 +160,21 @@ export const translations = {
                     name: "Spondias CMS",
                     role: "Full Stack",
                     desc: "Um CMS voltado para UX para uma floricultura, feito com simplicidade em mente para se enquadrar perfeitamente nas necessidades e no usecase do meu cliente.",
-                    tech: ["Next.js", "Arquitetura Monolítica", "PostgreSQL", "MongoDB"],
+                    tech: [
+                        "Next.js",
+                        "Arquitetura Monolítica",
+                        "PostgreSQL",
+                        "MongoDB",
+                    ],
                     url: "https://spondias.adnanbezerra.tech",
-                    image: "/spondias.png"
+                    image: "/spondias.png",
+                },
+                {
+                    name: "LavôEu",
+                    role: "Full Stack",
+                    desc: "Franquia de lavanderias em SP. Sistema com área de cliente e admin, suporte a totens e coordenação de máquinas físicas.",
+                    tech: ["React", "ExpressJS", "PostgreSQL"],
+                    image: "/lavoeu.png",
                 },
                 {
                     name: "Calendo",
@@ -170,13 +187,6 @@ export const translations = {
                     role: "Full Stack",
                     desc: "E-commerce para produtos artesanais. Desenvolvi o site, automação de pedidos e experiência de checkout.",
                     tech: ["Next.js", "TypeScript", "Tailwind"],
-                },
-                {
-                    name: "LavôEu",
-                    role: "Full Stack",
-                    desc: "Franquia de lavanderias em SP. Sistema com área de cliente e admin, suporte a totens e coordenação de máquinas físicas.",
-                    tech: ["React", "ExpressJS", "PostgreSQL"],
-                    image: "/lavoeu.png"
                 },
             ],
         },

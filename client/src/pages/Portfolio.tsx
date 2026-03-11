@@ -39,6 +39,8 @@ export default function Portfolio() {
     const { toast } = useToast();
     const createMessage = useCreateMessage();
     const [activeProjectIndex, setActiveProjectIndex] = useState(0);
+    const [isProjectCarouselHovered, setIsProjectCarouselHovered] =
+        useState(false);
     const [projectsPerView, setProjectsPerView] = useState(1);
 
     const {
@@ -90,7 +92,7 @@ export default function Portfolio() {
     }, [maxProjectIndex]);
 
     useEffect(() => {
-        if (maxProjectIndex === 0) {
+        if (maxProjectIndex === 0 || isProjectCarouselHovered) {
             return;
         }
 
@@ -101,7 +103,7 @@ export default function Portfolio() {
         }, 5000);
 
         return () => window.clearInterval(interval);
-    }, [maxProjectIndex]);
+    }, [isProjectCarouselHovered, maxProjectIndex]);
 
     const goToPreviousProject = () => {
         setActiveProjectIndex((current) =>
@@ -364,7 +366,15 @@ export default function Portfolio() {
                         </FadeIn>
 
                         <FadeIn delay={0.1}>
-                            <div className="relative">
+                            <div
+                                className="relative"
+                                onMouseEnter={() =>
+                                    setIsProjectCarouselHovered(true)
+                                }
+                                onMouseLeave={() =>
+                                    setIsProjectCarouselHovered(false)
+                                }
+                            >
                                 <div className="absolute right-0 -top-20 flex items-center gap-3">
                                     <button
                                         type="button"
