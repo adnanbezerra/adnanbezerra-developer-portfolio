@@ -1,5 +1,15 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+    ReactNode,
+} from "react";
 import { Language, translations } from "@/lib/translations";
+import {
+    applyDocumentLanguage,
+    persistLanguageOverride,
+} from "@/lib/language";
 
 type LanguageContextType = {
     language: Language;
@@ -11,12 +21,25 @@ const LanguageContext = createContext<LanguageContextType | undefined>(
     undefined,
 );
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-    const [language, setLanguage] = useState<Language>("en");
+export function LanguageProvider({
+    children,
+    initialLanguage,
+}: {
+    children: ReactNode;
+    initialLanguage: Language;
+}) {
+    const [language, setLanguageState] = useState<Language>(initialLanguage);
+
+    useEffect(() => {
+        applyDocumentLanguage(language);
+    }, [language]);
 
     const value = {
         language,
-        setLanguage,
+        setLanguage: (lang: Language) => {
+            setLanguageState(lang);
+            persistLanguageOverride(lang);
+        },
         t: translations[language],
     };
 

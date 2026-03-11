@@ -12,6 +12,24 @@ export const errorSchemas = {
 };
 
 export const api = {
+    locale: {
+        detect: {
+            method: "GET" as const,
+            path: "/api/locale/detect" as const,
+            responses: {
+                200: z.object({
+                    language: z.enum(["en", "pt"]),
+                    countryCode: z.string().nullable(),
+                    source: z.enum([
+                        "header",
+                        "ip_lookup",
+                        "accept_language",
+                        "default",
+                    ]),
+                }),
+            },
+        },
+    },
     messages: {
         create: {
             method: "POST" as const,
@@ -43,4 +61,7 @@ export function buildUrl(
 export type MessageInput = z.infer<typeof api.messages.create.input>;
 export type MessageResponse = z.infer<
     (typeof api.messages.create.responses)[201]
+>;
+export type LocaleDetectResponse = z.infer<
+    (typeof api.locale.detect.responses)[200]
 >;

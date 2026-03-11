@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import type { Language } from "@/lib/translations";
 import NotFound from "@/pages/not-found";
 import Portfolio from "@/pages/Portfolio";
 
@@ -16,10 +17,10 @@ function Router() {
     );
 }
 
-function App() {
+function App({ initialLanguage }: { initialLanguage: Language }) {
     return (
         <QueryClientProvider client={queryClient}>
-            <LanguageProvider>
+            <LanguageProvider initialLanguage={initialLanguage}>
                 <TooltipProvider>
                     <Toaster />
                     <Router />
