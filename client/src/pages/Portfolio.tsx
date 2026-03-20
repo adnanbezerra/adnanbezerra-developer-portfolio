@@ -292,14 +292,6 @@ export default function Portfolio() {
                                         alt="Adnan Bezerra"
                                         className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-indigo-500/20 group-hover:scale-110 transition-transform duration-700"
                                     ></img>
-
-                                    {/* Decorative code elements inside the "avatar" box */}
-                                    <div className="absolute top-8 left-8 text-white/20 font-mono text-sm group-hover:text-primary/40 transition-colors">
-                                        {"<FullStack />"}
-                                    </div>
-                                    <div className="absolute bottom-8 right-8 text-white/20 font-mono text-sm group-hover:text-primary/40 transition-colors">
-                                        {"await build()"}
-                                    </div>
                                 </div>
                             </FadeIn>
                         </div>
@@ -375,7 +367,7 @@ export default function Portfolio() {
                                     setIsProjectCarouselHovered(false)
                                 }
                             >
-                                <div className="absolute right-0 -top-20 flex items-center gap-3">
+                                <div className="absolute right-0 -top-14 flex items-center gap-3">
                                     <button
                                         type="button"
                                         onClick={goToPreviousProject}

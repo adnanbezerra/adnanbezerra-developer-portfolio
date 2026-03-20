@@ -35,7 +35,7 @@ export const translations = {
                 "Technologies I work with on a daily basis to build robust solutions.",
         },
         projects: {
-            title: "Projects Guided By Me",
+            title: "Projects",
             items: [
                 {
                     name: "Spondias CMS",
@@ -154,7 +154,7 @@ export const translations = {
                 "Ferramentas que utilizo diariamente para construir soluções robustas.",
         },
         projects: {
-            title: "Projetos Guiados por Mim",
+            title: "Projetos",
             items: [
                 {
                     name: "Spondias CMS",
