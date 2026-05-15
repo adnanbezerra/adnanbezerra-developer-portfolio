@@ -2,7 +2,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
     ArrowRight,
     ChevronLeft,
@@ -41,7 +41,10 @@ export default function Portfolio() {
     const [activeProjectIndex, setActiveProjectIndex] = useState(0);
     const [isProjectCarouselHovered, setIsProjectCarouselHovered] =
         useState(false);
+    const [isProjectsSectionVisible, setIsProjectsSectionVisible] =
+        useState(false);
     const [projectsPerView, setProjectsPerView] = useState(1);
+    const projectsSectionRef = useRef<HTMLElement | null>(null);
 
     const {
         register,
@@ -92,7 +95,32 @@ export default function Portfolio() {
     }, [maxProjectIndex]);
 
     useEffect(() => {
-        if (maxProjectIndex === 0 || isProjectCarouselHovered) {
+        const section = projectsSectionRef.current;
+
+        if (!section) {
+            return;
+        }
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsProjectsSectionVisible(entry.isIntersecting);
+            },
+            {
+                threshold: 0.35,
+            },
+        );
+
+        observer.observe(section);
+
+        return () => observer.disconnect();
+    }, []);
+
+    useEffect(() => {
+        if (
+            maxProjectIndex === 0 ||
+            isProjectCarouselHovered ||
+            !isProjectsSectionVisible
+        ) {
             return;
         }
 
@@ -100,10 +128,10 @@ export default function Portfolio() {
             setActiveProjectIndex((current) =>
                 current >= maxProjectIndex ? 0 : current + 1,
             );
-        }, 5000);
+        }, 3000);
 
         return () => window.clearInterval(interval);
-    }, [isProjectCarouselHovered, maxProjectIndex]);
+    }, [isProjectCarouselHovered, isProjectsSectionVisible, maxProjectIndex]);
 
     const goToPreviousProject = () => {
         setActiveProjectIndex((current) =>
@@ -345,6 +373,7 @@ export default function Portfolio() {
                 {/* PROJECTS SECTION */}
                 <section
                     id="projects"
+                    ref={projectsSectionRef}
                     className="py-24 bg-card/30 border-y border-white/5 backdrop-blur-sm"
                 >
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
