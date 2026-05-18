@@ -1,6 +1,7 @@
 # ---------- Base ----------
 FROM node:20-alpine AS base
-RUN corepack enable pnpm
+ARG PNPM_VERSION=10.33.3
+RUN corepack enable pnpm && corepack prepare pnpm@${PNPM_VERSION} --activate
 
 # ---------- Dependencies ----------
 FROM base AS deps
@@ -23,12 +24,10 @@ COPY . .
 RUN pnpm build
 
 # ---------- Runner ----------
-FROM node:20-alpine AS runner
+FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
-
-RUN corepack enable pnpm
 
 # Criar usuário não-root
 RUN addgroup -S nodejs -g 1001
